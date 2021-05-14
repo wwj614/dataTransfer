@@ -39,7 +39,8 @@ private:
 class colsTransform {
 public:
   colsTransform(int nCol, unique_ptr<funBase> transform) 
-  : _nCol(nCol) { _transform=move(transform);
+  : _nCol(nCol) { 
+    _transform=move(transform);
   }
   ~colsTransform() {}
   
@@ -49,10 +50,6 @@ public:
     if (!s.empty()) 
 	    cols[_nCol]=(*_transform)(s);  
   }
-  
-//  void delFunBase() {
-//    if (_transform) delete _transform;  
-//  }
   
 private:
   int _nCol; 

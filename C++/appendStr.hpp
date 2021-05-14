@@ -5,14 +5,14 @@ public:
   appendStrFun(){}
   virtual ~appendStrFun(){}
   virtual void init(stringMap& p) {
-    _s=p["P1"];
-    _isHead=stoi(p["P2"])>0;
+    _value=p["value"];
+    _prefix=stoi(p["prefix"])>0;
   }
   virtual string operator() (string& s) {
-    if (_isHead) return _s + s;  
-    return s + _s;
+    if (_prefix) return _value + s;  
+    return s + _value;
   }
 private:
-  string _s; 
-  bool _isHead;
+  string _value; 
+  bool _prefix;
 };

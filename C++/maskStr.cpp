@@ -1,4 +1,6 @@
 #include <cstring>
+#include <cassert>
+#include <string>
 
 #include "funBase.hpp"
 #include "maskStr.hpp"
@@ -12,22 +14,29 @@ extern "C" funBase* create() {
 }
 
 void maskStrFun::init(stringMap& p) {
-  string mask=p["P1"];
-  _maskLen=mask.size();
-  _mask=new char[_maskLen+1];
-  memcpy(_mask,mask.c_str(),_maskLen+1);
+  string maskFormat=p["maskFormat"];
+  _maskLen=maskFormat.size();
+  _maskFormat=new char[_maskLen+1];
+  memcpy(_maskFormat,maskFormat.c_str(),_maskLen+1);
+
+  _maxColLength=stoi(p["maxColLength"]);
+  _buf=new char[_maxColLength];
 };
   
 string maskStrFun::operator() (string& s) {  
   int dataLen=s.size();
-  char* data=new char[dataLen+1];
-  memcpy(data,s.c_str(),dataLen+1);
+  assert(dataLen<_maxColLength);
+  memcpy(_buf,s.c_str(),dataLen+1);
   int len=min(_maskLen,dataLen);
   for (int i=0;i<len;++i) {
-    if (_mask[i]=='*') {
-      data[i]='*';
+    if (_maskFormat[i]=='*') {
+      _buf[i]='*';
     }
   }
-  return string(data);              
+  return string(_buf);              
 };
-  
+
+maskStrFun::~maskStrFun() { 
+  if (_maskFormat) delete _maskFormat; 
+  if (_buf)  delete _buf; 
+};

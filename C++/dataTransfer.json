@@ -1,0 +1,43 @@
+[ 
+  { "soName"        : "./maskStr.so"
+  , "createName"    : "create"
+  , "colSeq"        : 0
+  , "maskFormat"    : "___**__***___" 
+  , "maxColLength"  : 300
+  }
+, { "soName"        : "./appendStr.so"
+  , "createName"    : "create"
+  , "colSeq"        : 0
+  , "value"         : "AAA" 
+  , "prefix"        : 1
+  } 
+, { "soName"        : "./appendStr.so"
+  , "createName"    : "create"
+  , "colSeq"        : 1
+  , "value"         : "ZZZ" 
+  , "prefix"        : 0
+  } 
+, { "soName"        : "./regexStr.so"
+  , "createName"    : "regexCreate"
+  , "colSeq"        : 1
+  , "regexRule"     : "[0-9][0-9]" 
+  , "result"        : "#$" 
+  , "flags"         : "g"
+  }
+, { "soName"        : "./mapStr.so"
+  , "createName"    : "create"
+  , "colSeq"        : 2
+  , "mapFile"       : "./keyPos.csv" 
+  , "keyCount"      : 10000
+  }
+, { "soName"        : "./md5Str.so"
+  , "createName"    : "create"
+  , "colSeq"        : 4
+  }
+, { "soName"        : "./regexStr.so"
+  , "createName"    : "wregexCreate"
+  , "colSeq"        : 3
+  , "regexRule"     : "^([^省]省)?(.*市){0,2}([^区县]*[区县])?(.*)$"                        
+  , "result"        : "$1$2$3" 
+  }
+]

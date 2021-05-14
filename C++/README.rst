@@ -41,13 +41,14 @@ maskStr.hpp
 maskStr.so*
 
 使用的C++技术
-1、用map纪录xxx.so保证只载入一次
-2、用xxx.so和createName唯一表征函数，多个fn可以共存于一个so文件，用createName区分
-3、用stringMap统一参数传递初始化仿函数
-4、用umique_ptr控so和funbase实例只有一份
-5、用string和wstring统一输入和输出只使用string（wregexStr实现）
-6、用getline转换csv为stringVector，不能处理引号中分割符
-7、退出前用clear释放资源
+1、xxx.so动态载入，而非静态链接。
+2、用map纪录xxx.so保证只载入一次
+3、用xxx.so和createName唯一表征函数，多个fn可以共存于一个so文件，用createName区分
+4、用stringMap统一参数传递初始化仿函数
+5、用umique_ptr控so和funbase实例只有一份
+6、用string和wstring统一输入和输出只使用string（wregexStr实现）
+7、用getline转换csv为stringVector，不能处理引号中分割符
+8、退出前用clear释放资源
    so要在so中对象释放完后才能卸载
 
 改进

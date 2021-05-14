@@ -13,7 +13,20 @@ public:
   virtual string operator() (string& s);
   
 private:
-  regex _e;
-  string _fmt;
+  regex _regexRule;
+  string _result;
+  regex_constants::match_flag_type _flags;
+};
+
+class wregexStrFun : public funBase {
+public:
+  wregexStrFun(){}
+  virtual ~wregexStrFun(){}
+  virtual void init(stringMap& p);
+  virtual string operator() (string& s);
+  
+private:
+  wregex _regexRule;
+  wstring _result;
   regex_constants::match_flag_type _flags;
 };
