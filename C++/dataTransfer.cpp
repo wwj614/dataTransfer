@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "json.hpp"
+#include "csvReader.hpp"
 #include "funFactory.hpp"
 
 using namespace std;
@@ -15,27 +16,22 @@ using namespace std;
 g++ -std=c++11 -m64 -o dataTransfer dataTransfer.cpp -ldl
 ****************************************************************************/
 int main(int argc, char **argv) {
+  char* configFileName=argv[1];    
+  char delimited=argv[2][0];    
+
   vector<unique_ptr<colsTransform>> rowFs;
   map<string,unique_ptr<funFactory>> funFactorys;
   
-  char* configFileName=argv[1];    
-  ifstream inFile(configFileName);
+  ifstream configFile(configFileName);
   nlohmann::json jsonCfg;
-  inFile >> jsonCfg;
-
+  configFile >> jsonCfg;
   stringMap p;
   for (auto& funParas : jsonCfg) {
     for (auto& item : funParas.items()) {
       string name = item.key();      
       auto itemValue=item.value();
-      string value;
-      if (itemValue.is_number()) 
-        value=to_string(itemValue);
-      else
-        value=itemValue;
-      p[name]=value;
+      p[name]=itemValue.is_number()? to_string(itemValue) : itemValue.get<string>();
     }
-
     string soName=p["soName"];    
     auto it = funFactorys.find(p[soName]);
     if ( it == funFactorys.end() ) {
@@ -44,28 +40,21 @@ int main(int argc, char **argv) {
 
     string createName=p["createName"];
     unique_ptr<funBase> pFun = unique_ptr<funBase>(funFactorys[soName]->create(createName));
+    pFun->init(p);
  
     int nCol=stoi(p["colSeq"]);   
-    
-    pFun->init(p);
-
     rowFs.push_back(unique_ptr<colsTransform>(new colsTransform(nCol,move(pFun))));
     p.clear();
   }
 
-  string row;
   vector<string> cols;  
-  while (getline(cin, row)) {
-    istringstream sin(row); 
-
-    string col;
-    while (getline(sin, col,',')) {
-      cols.push_back(col);  
-    }
+  CSVReader csv;
+  csv.open("-");
+  while(csv.nextCols(cols)) {
     for (auto& r:rowFs) {  
       (*r)(cols);
     }
-    cout << join(cols.begin(),cols.end(),",") <<endl;
+    cout << join(cols.begin(),cols.end(),delimited) <<endl; 
     cols.clear();
   }
 

@@ -57,11 +57,11 @@ private:
 };
 
 template<class InputIterator>
-string join (InputIterator first, InputIterator last, string delimited) {
+string join (InputIterator first, InputIterator last, char delimited) {
   if (first==last) return "";
   string s = *(first++);
   while (first!=last) {
-	s += (delimited + *first);  
+	s = s + delimited + *first;  
     ++first;
   }
   return s;
